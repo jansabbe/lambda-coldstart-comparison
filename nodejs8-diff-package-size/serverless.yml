@@ -1,8 +1,8 @@
-service: aws-coldstart-nodejs6-package-size
+service: aws-coldstart-nodejs8-package-size
 
 provider:
   name: aws
-  runtime: nodejs4.3
+  runtime: nodejs8.10
   versionFunctions: false
 
 package:

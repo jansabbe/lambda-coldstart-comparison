@@ -22,11 +22,11 @@ let readStats = co.wrap(function* () {
   let contents = yield fs.readFileAsync('results.csv', 'utf-8');
   let rows = contents
     .split('\n')
-    .filter(str => str.match(/aws-coldstart-nodejs6-package-size-dev-(.*)-(\d+\d*)/i))
+    .filter(str => str.match(/aws-coldstart-nodejs8-package-size-dev-(.*)-(\d+\d*)/i))
     .map(str => {
       let parts = str.split(',');
       let funcName = parts[0];
-      let matchRes = funcName.match(/aws-coldstart-nodejs6-package-size-dev-(.*)-(\d+\d*)/i);
+      let matchRes = funcName.match(/aws-coldstart-nodejs8-package-size-dev-(.*)-(\d+\d*)/i);
 
       let group = matchRes[1];
       let memorySize = parseInt(matchRes[2]);
@@ -46,13 +46,14 @@ let boxPlot = co.wrap(function*() {
   let rows = _.sortBy(yield readStats(), r => r.memorySize);
 
   let byLang = {
-    csharp: { y: [], x: [], type: "box", boxpoints: "all", name: "csharp" },
+    csharp20: { y: [], x: [], type: "box", boxpoints: "all", name: "csharp20" },
+    csharp21: { y: [], x: [], type: "box", boxpoints: "all", name: "csharp21" },
     java:   { y: [], x: [], type: "box", boxpoints: "all", name: "java" },
     python: { y: [], x: [], type: "box", boxpoints: "all", name: "python" },
-    nodejs6: { y: [], x: [], type: "box", boxpoints: "all", name: "nodejs6" }
+    nodejs8: { y: [], x: [], type: "box", boxpoints: "all", name: "nodejs8" }
   }
 
-  rows.forEach(row => {  
+  rows.forEach(row => {
     byLang[row.lang].y.push(row.value);
     byLang[row.lang].x.push(`${row.memorySize}MB`);
   });
@@ -70,21 +71,21 @@ let boxPlot = co.wrap(function*() {
   };
 
   let graphOptions = { filename: "cold-start-by-language", fileopt: "overwrite" };
-  plotly.plot(data, graphOptions, function (err, msg) {    
+  plotly.plot(data, graphOptions, function (err, msg) {
     let childProc = require('child_process');
     console.log(msg);
 
     childProc.exec(`open -a "Google Chrome" ${msg.url}`);
   });
-  
+
 });
 
 let calcStats = co.wrap(function*() {
   let rows = yield readStats();
   let byCodeSize = _.groupBy(rows, r => `${r.codeSize}-${r.memorySize}MB`);
-  
+
   let statsByCodeSize = _.mapValues(
-    byCodeSize, 
+    byCodeSize,
     rs => {
       let values = rs.map(r => r.value);
       let stats = new Stats();

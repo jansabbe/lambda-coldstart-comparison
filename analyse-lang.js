@@ -38,10 +38,11 @@ let boxPlot = co.wrap(function*() {
   let rows = _.sortBy(yield readStats(), r => r.memorySize);
 
   let byLang = {
-    csharp: { y: [], x: [], type: "box", boxpoints: "all", name: "csharp" },
+    csharp20: { y: [], x: [], type: "box", boxpoints: "all", name: "csharp20" },
+    csharp21: { y: [], x: [], type: "box", boxpoints: "all", name: "csharp21" },
     java:   { y: [], x: [], type: "box", boxpoints: "all", name: "java" },
     python: { y: [], x: [], type: "box", boxpoints: "all", name: "python" },
-    nodejs6: { y: [], x: [], type: "box", boxpoints: "all", name: "nodejs6" },
+    nodejs8: { y: [], x: [], type: "box", boxpoints: "all", name: "nodejs8" },
     golang: { y:[], x: [], type: "box", boxpoints: "all", name: "golang"}
   }
 

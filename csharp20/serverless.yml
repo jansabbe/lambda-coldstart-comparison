@@ -1,4 +1,4 @@
-service: aws-coldstart-csharp
+service: aws-coldstart-csharp20
 
 provider:
   name: aws

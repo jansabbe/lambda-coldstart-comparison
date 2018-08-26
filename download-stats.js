@@ -8,7 +8,7 @@ AWS.config.region = 'us-east-1';
 const cloudwatch  = Promise.promisifyAll(new AWS.CloudWatch());
 const Lambda      = new AWS.Lambda();
 
-const START_TIME = new Date('2017-06-07T01:00:00.000Z');
+const START_TIME = new Date('2018-08-26T08:03:47.620Z');
 const DAYS = 2;
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
@@ -28,7 +28,7 @@ let getFuncStats = co.wrap(function* (funcName) {
     };
     let resp = yield cloudwatch.getMetricStatisticsAsync(req);
 
-    return resp.Datapoints.map(dp => { 
+    return resp.Datapoints.map(dp => {
       return {
         timestamp: dp.Timestamp,
         value: dp.Maximum
@@ -38,7 +38,7 @@ let getFuncStats = co.wrap(function* (funcName) {
 
   let stats = [];
   for (let i = 0; i < DAYS; i++) {
-    // CloudWatch only allows us to query 1440 data points per request, which 
+    // CloudWatch only allows us to query 1440 data points per request, which
     // at 1 min period is 24 hours
     let startTime = addDays(START_TIME, i);
     let endTime   = addDays(startTime, 1);
